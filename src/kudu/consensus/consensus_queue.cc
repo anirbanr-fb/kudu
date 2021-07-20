@@ -779,7 +779,12 @@ Status PeerMessageQueue::RequestForPeer(const string& uuid,
   // If the next hop != the destination, we are sending these messages via a proxy.
   bool route_via_proxy = *next_hop_uuid != uuid;
   if (route_via_proxy) {
+    // Set proxy uuid
     request->set_proxy_dest_uuid(*next_hop_uuid);
+  } else {
+    // Clear proxy uuid to ensure that this message is not rejected by the
+    // destination
+    request->clear_proxy_dest_uuid();
   }
 
   // If we've never communicated with the peer, we don't know what messages to
